@@ -27,6 +27,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform-demo" {
   }
 }
 
+# Optional: enable versioning
 resource "aws_s3_bucket_versioning" "terraform-demo" {
   bucket = aws_s3_bucket.terraform-demo.id
   versioning_configuration {
