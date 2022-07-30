@@ -9,8 +9,9 @@ resource "aws_s3_bucket" "terraform-demo" {
 
 # Optional: restrict public access
 resource "aws_s3_bucket_public_access_block" "terraform-demo" {
-  bucket = aws_s3_bucket.terraform-demo.id
+  bucket            = aws_s3_bucket.terraform-demo.id
   block_public_acls = true
+  block_public_policy = true
 }
 
 # Optional: encrypt the bucket
@@ -19,7 +20,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+      sse_algorithm = "AES256"
     }
   }
 }
