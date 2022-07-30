@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "terraform-demo" {
   bucket = "terraform-demo-test"
-  acl    = "private"
 
   tags = {
     Name        = "terraform-demo"
@@ -8,7 +7,36 @@ resource "aws_s3_bucket" "terraform-demo" {
   }
 }
 
-resource "aws_s3_bucket_object" "object" {
+# Optional: restrict public access
+resource "aws_s3_bucket_public_access_block" "terraform-demo" {
+  bucket                  = aws_s3_bucket.terraform-demo.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# Optional: encrypt the bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform-demo" {
+  bucket = aws_s3_bucket.terraform-demo.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+# Optional: enable versioning
+resource "aws_s3_bucket_versioning" "terraform-demo" {
+  bucket = aws_s3_bucket.terraform-demo.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+
+resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.terraform-demo.id
   key    = "test"
   source = "terraform-demo.pdf"
